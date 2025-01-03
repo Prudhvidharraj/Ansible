@@ -1,0 +1,15 @@
+---
+- hosts: pddrserver
+  remote_user: root
+  become: yes
+  tasks:
+    - name: install httpd
+      yum: name=httpd state=installed
+      when: ansible-os-family=="redhat"
+    - name: install  apache2
+      apt: name=apache2 state=installed
+      when: ansible-os-family=="debian"
+    - name: creates index.html
+      copy: src=index.html dest=/var/www/html
+    - name: restart httpd
+      service: name=httpd state=started

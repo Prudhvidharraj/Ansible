@@ -1,0 +1,14 @@
+---
+- hosts: pddrserver
+  remote_user: root
+  become: yes
+  tasks:
+    - name: install httpd
+      yum: name=httpd state=installed
+    - name: copy index.html
+      copy: src=index.html dest=/var/www/html
+    - name: start service
+      service: name=httpd state=started
+      register: output
+    - debug:
+        msg: "{{output}}"

@@ -1,0 +1,13 @@
+---
+- hosts: pddrserver
+  remote_user: root
+  become: yes
+  vars_files: 
+      _abc.yml
+    tasks:
+    - name: install httpd
+      yum: name={{pkg}} state=installed
+    - name: copy index.html
+      copy: src=index.html dest=/var/www/html
+    - name: start service
+      service: name={{pkg}} state=started 

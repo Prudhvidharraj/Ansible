@@ -1,0 +1,28 @@
+---
+- hosts: pddrserver
+  remote_user: root
+  become: yes
+  tasks:
+    - name: install httpd
+      yum: name=httpd state=installed
+      tags:
+        -install
+    - name: copy index.html
+      copy: src=index.html dest=/var/www/html
+      tags:
+        -configure
+    - name: start service
+      service: name=httpd state=started
+      tags:
+        -service
+
+
+
+
+
+ansible-playbook tags.yml --tag "install,configure"
+ansible-playbook tags.yml --skip -tags "install,configure"
+
+ansible-playbook tags.yml --start-at-task="copy index.html"
+
+ansible-playbook tags.yml --step

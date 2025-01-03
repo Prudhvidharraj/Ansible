@@ -1,0 +1,11 @@
+---
+- hosts: pddrserver
+  remote_user: root
+  become: yes
+  tasks:
+    - name: installing multiple packages
+      yum: name={{item}} state=installed
+      with_items:
+           -httpd
+           -curl
+           -wget
