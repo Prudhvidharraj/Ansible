@@ -3,13 +3,22 @@
   remote_user: root
   become: yes
   vars_prompt:
-      -name: pkg
-       prompt: enter package name
-       private: no
-    tasks:
-     - name: pddr install httpd
-       yum: name={{pkg}} state=installed
-     - name: copy index.html
-       copy: scr=index.html dest=/var/www/html
-     - name: service httpd start
-       service: name={{pkg}} state=started
+    - name: pkg
+      prompt: "Enter package name"
+      private: no
+
+  tasks:
+    - name: Install package
+      yum:
+        name: "{{ pkg }}"
+        state: installed
+
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html
+
+    - name: Start service
+      service:
+        name: "{{ pkg }}"
+        state: started

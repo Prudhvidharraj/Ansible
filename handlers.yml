@@ -1,15 +1,27 @@
 ---
-- hosts: pddrserver
+- hosts: webserver 
   remote_user: root
   become: yes
   tasks:
     - name: install httpd
-      yum: name:httpd state:installed
+      yum:
+        name: httpd
+        state: installed
+
     - name: copy index.html
-      copy: src:index.html dest:/var/www/html
+      copy:
+        src: index.html
+        dest: /var/www/html
       notify: restart httpd
+
     - name: start service
-      service: name:httpd state:started
-    handlers:
-        - name: restart httpd
-          service: name:httpd state:restarted  
+      service:
+        name: httpd
+        state: started
+
+  handlers:
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
+ 

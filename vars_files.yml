@@ -3,11 +3,20 @@
   remote_user: root
   become: yes
   vars_files: 
-      _abc.yml
-    tasks:
-    - name: install httpd
-      yum: name={{pkg}} state=installed
-    - name: copy index.html
-      copy: src=index.html dest=/var/www/html
-    - name: start service
-      service: name={{pkg}} state=started 
+    - abc.yml
+
+  tasks:
+    - name: Install package
+      yum:
+        name: "{{ pkg }}"
+        state: installed
+
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html
+
+    - name: Start service
+      service:
+        name: "{{ pkg }}"
+        state: started

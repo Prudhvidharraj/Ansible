@@ -3,13 +3,31 @@
   remote_user: root
   become: yes
   tasks:
-    - name: install httpd
-      yum: name=httpd state=installed
-      when: ansible-os-family=="redhat"
-    - name: install  apache2
-      apt: name=apache2 state=installed
-      when: ansible-os-family=="debian"
-    - name: creates index.html
-      copy: src=index.html dest=/var/www/html
-    - name: restart httpd
-      service: name=httpd state=started
+    - name: Install httpd on RedHat-based systems
+      yum:
+        name: httpd
+        state: installed
+      when: ansible_os_family == "RedHat"
+
+    - name: Install apache2 on Debian-based systems
+      apt:
+        name: apache2
+        state: installed
+      when: ansible_os_family == "Debian"
+
+    - name: Create index.html
+      copy:
+        src: index.html
+        dest: /var/www/html
+
+    - name: Start the httpd service (RedHat-based)
+      service:
+        name: httpd
+        state: started
+      when: ansible_os_family == "RedHat"
+
+    - name: Start the apache2 service (Debian-based)
+      service:
+        name: apache2
+        state: started
+      when: ansible_os_family == "Debian"
